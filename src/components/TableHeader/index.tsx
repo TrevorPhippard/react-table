@@ -28,8 +28,14 @@ export function TableHeader({
   focusFirstCellInColumn,
   registerHeaderRef,
 }: Readonly<Props>) {
-  const { attributes, listeners, transform, transition, isDragging } =
-    useSortable({ id: column.id });
+  const {
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+    setNodeRef,
+  } = useSortable({ id: column.id });
 
   const ref = useRef<HTMLTableCellElement>(null);
   const [width, setWidth] = useState(0);
@@ -65,6 +71,7 @@ export function TableHeader({
       style={style}
       aria-sort={sortState.direction}
       ref={(node) => {
+        setNodeRef(node);
         registerHeaderRef(colIndex, node);
         ref.current = node;
       }}
