@@ -1,0 +1,57 @@
+/* src/index.css or src/App.css */
+@import "tailwindcss";
+
+@theme {
+  --color-heading: #2e2e2e;
+  --color-thrive-dark-grey: #52555e;
+  --color-thrive-purple: #674263;
+  --color-thrive-dark: #171f32;
+  --color-thrive-yellow: #efbe29;
+  --color-tint-3-4: #f3d169;
+  --color-thrive-pink: #f7cee3;
+
+  --color-thrive-grey-text: #52555e;
+  --color-thrive-dark-2: #3d273b;
+  --color-thrive-tint-3: #947a91;
+  --color-thrive-dark-1: #52344f;
+  --color-thrive-tint-1: #765472;
+  --color-thrive-tint-2: #856782;
+} */
+
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
