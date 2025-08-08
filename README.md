@@ -16,11 +16,3 @@ Pass in an array of `columns` and `data` via props. The component manages sortin
 ```tsx
 <Table columns={columns} data={data} />
 ```
-
-## known issues
-
-joined data  "Full Name"  & "DSR" (Days Since Registered) column not sorting
-
-keyboard navigation still broken, can arrowdown from header, can't arrow back
-
-sorting needs some sort of aria notification

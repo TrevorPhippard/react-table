@@ -42,9 +42,11 @@ export function useKeyboardNavigation(
         if (row === 0) {
           newCol = Math.min(col + 1, totalCols - 1);
           exitFlag = true;
+          setFocusedCell(null);
           if (focusHeader) focusHeader(newCol);
+        } else {
+          newRow = Math.max(row - 1, 0);
         }
-        newRow = Math.max(row - 1, 0);
         break;
       case "ArrowRight":
         e.preventDefault();
@@ -84,16 +86,16 @@ export function useKeyboardNavigation(
         }
         setFocusedCell(null);
       } else {
+        if (focusedCell === null) newRow = --newRow;
         setFocusedCell({ row: newRow, col: newCol });
         setFocusedHeader(null);
       }
     }
-
-    console.log({ focusedCell, focusedHeader });
   }
 
   // Accept number instead of string for column index
   function focusFirstCellInColumn(colIndex: number | null) {
+    console.log("here", colIndex);
     if (colIndex !== null) setFocusedCell({ row: 0, col: colIndex });
   }
 
