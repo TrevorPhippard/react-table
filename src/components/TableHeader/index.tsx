@@ -58,7 +58,7 @@ export function TableHeader({
       key={column.id}
       scope="col"
       role="columnheader"
-      className="bg-thrive-purple text-white text-left  max-[650px]:hidden"
+      className="bg-thrive-purple text-white text-left max-[650px]:hidden"
       style={style}
       aria-sort={sortState.direction}
       ref={(node) => {

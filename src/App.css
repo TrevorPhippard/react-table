@@ -1,5 +1,5 @@
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   width: 100%;
   margin: 0 auto;
   padding: 2rem;
@@ -25,7 +25,8 @@ th {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-table{
+
+table thead {
   background-color: #52344f;
 }
 

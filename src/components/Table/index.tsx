@@ -4,6 +4,8 @@ import { arrayMove } from "@dnd-kit/sortable";
 
 import type { TableProps, SortState } from "../../types";
 import { useSortedData } from "../../hooks/useSortedData";
+
+import { useWithNewFeilds } from "../../hooks/useWithNewFeilds";
 import { TableVirtuoso } from "react-virtuoso";
 import { TableHeaderRow } from "../TableHeaderRow";
 import { Cell } from "../Cell";
@@ -11,14 +13,19 @@ import { useCellRefs } from "../../hooks/useCellRefs"; // new file
 import { useKeyboardNavigation } from "../../hooks/useKeyboardNavigation"; // new file
 import { getNextSortDirection } from "../../utils/sortUtils"; // new file
 
-export function Table({ columns, data }: Readonly<TableProps>) {
+export function Table({ columns, data: tableData }: Readonly<TableProps>) {
   const [columnOrder, setColumnOrder] = useState(() =>
     columns.map((c) => c.id)
   );
+
   const [sortState, setSortState] = useState<SortState>({
     column: null,
     direction: "none",
   });
+
+  const data = useWithNewFeilds(tableData);
+
+  console.log(data[0]);
 
   // Sorted data based on sortState
   const sortedData = useSortedData(data, sortState.column, sortState.direction);
@@ -62,7 +69,7 @@ export function Table({ columns, data }: Readonly<TableProps>) {
   };
 
   return (
-    <div className="mx-auto max-w-full overflow-x-auto [width:min(900px,100%-3rem)] h-200 block">
+    <div className="mx-auto max-w-full overflow-x-auto [width:min(1300px,100%-3rem)] h-200 ">
       <TableVirtuoso
         style={{ height: "100%" }}
         data={sortedData}

@@ -46,7 +46,7 @@ export function Cell({
         // userSelect: "none",
       }}
     >
-      <span className="visible sm:invisible font-bold">{col}: </span>
+      <span className="inline-block sm:hidden font-bold mr-2">{col}: </span>
       {value}
     </td>
   );

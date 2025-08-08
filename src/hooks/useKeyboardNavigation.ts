@@ -14,8 +14,6 @@ export function useKeyboardNavigation(
 
   // Whenever focusedCell changes, move focus to that cell
   useEffect(() => {
-    console.log("focusedCell::", focusedCell.row, focusedCell.col);
-
     focusCell(nanToZero(focusedCell.row), nanToZero(focusedCell.col));
   }, [focusedCell, focusCell]);
 

@@ -1,6 +1,6 @@
 export type RowData = {
   ID: number;
-  first_name: string;
+  first_name: string | undefined;
   last_name: string;
   full_name?: string;
   email: string;
