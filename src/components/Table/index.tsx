@@ -75,7 +75,7 @@ export function Table({ columns, data: tableData }: Readonly<TableProps>) {
   };
 
   return (
-    <div className="mx-auto max-w-full overflow-x-auto [width:min(1300px,100%-3rem)] h-200 ">
+    <div className="mx-auto max-w-full overflow-x-auto [width:min(1385px,100%-3rem)] h-200 ">
       <TableVirtuoso
         style={{ height: "100%" }}
         data={sortedData}
