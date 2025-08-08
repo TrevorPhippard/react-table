@@ -1,17 +1,52 @@
-type Props = {
+import { useEffect, useRef } from "react";
+
+interface CellProps {
   value: string | number;
   col: string;
-};
-{
-  /* <span className="visible sm:invisible"> {col}:</span>; */
+  rowIndex: number;
+  colIndex: number;
+  totalRows: number;
+  totalCols: number;
+  focused: boolean;
+  tabIndex: number;
+  registerRef: (node: HTMLDivElement | null) => void;
+  onKeyDown: (e: React.KeyboardEvent) => void;
 }
-export function Cell({ value, col }: Readonly<Props>) {
+
+export function Cell({
+  col,
+  value,
+  rowIndex,
+  colIndex,
+  focused,
+  tabIndex,
+  registerRef,
+  onKeyDown,
+}: Readonly<CellProps>) {
+  const ref = useRef<HTMLTableDataCellElement | null>(null);
+
+  useEffect(() => {
+    registerRef(ref.current);
+    return () => registerRef(null);
+  }, [registerRef]);
+
   return (
     <td
-      tabIndex={0}
-      className="p-4 before:font-bold before:capitalize before:pr-2 truncate "
+      tabIndex={tabIndex}
+      id={"focus_" + colIndex + "_" + rowIndex}
+      ref={ref}
+      className="p-2 before:font-bold before:capitalize before:pr-2 truncate "
       data-cell={col}
+      role="gridcell"
+      aria-colindex={colIndex + 1}
+      aria-rowindex={rowIndex + 1}
+      onKeyDown={onKeyDown}
+      style={{
+        outline: focused ? "2px solid Highlight" : "none",
+        // userSelect: "none",
+      }}
     >
+      <span className="visible sm:invisible font-bold">{col}: </span>
       {value}
     </td>
   );

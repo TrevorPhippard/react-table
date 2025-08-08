@@ -16,3 +16,9 @@ Pass in an array of `columns` and `data` via props. The component manages sortin
 ```tsx
 <Table columns={columns} data={data} />
 ```
+
+## known issues
+
+joined data  "Full Name"  & "DSR" (Days Since Registered) column not sorting
+
+keyboard navigation still broken, have to click into the table to have it work

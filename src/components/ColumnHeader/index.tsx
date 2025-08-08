@@ -3,7 +3,7 @@ import React from "react";
 type Props = {
   title: string;
   isSorted: boolean;
-  sortDirection: "asc" | "desc" | null;
+  sortDirection: "ascending" | "descending" | "none";
   onSort: () => void;
   dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 };
@@ -24,7 +24,9 @@ export function ColumnHeader({
       <div className="truncate p-3">{title}</div>
       <div className="flex">
         {isSorted && (
-          <span className="text-xs">{sortDirection === "asc" ? "▲" : "▼"}</span>
+          <span className="text-xs">
+            {sortDirection === "ascending" ? "▲" : "▼"}
+          </span>
         )}
         <div className="cursor-grab pl-2" {...dragHandleProps}>
           ⠿

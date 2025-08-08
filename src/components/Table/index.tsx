@@ -2,66 +2,67 @@ import { useState, useMemo } from "react";
 import { type DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 
-import type { TableProps, Direction, SortState } from "../../types";
+import type { TableProps, SortState } from "../../types";
 import { useSortedData } from "../../hooks/useSortedData";
 import { TableVirtuoso } from "react-virtuoso";
-import { Cell } from "../Cell";
 import { TableHeaderRow } from "../TableHeaderRow";
+import { Cell } from "../Cell";
+import { useCellRefs } from "../../hooks/useCellRefs"; // new file
+import { useKeyboardNavigation } from "../../hooks/useKeyboardNavigation"; // new file
+import { getNextSortDirection } from "../../utils/sortUtils"; // new file
 
 export function Table({ columns, data }: Readonly<TableProps>) {
-  // Keep track of column order for drag-and-drop
   const [columnOrder, setColumnOrder] = useState(() =>
-    columns.map((col) => col.id)
+    columns.map((c) => c.id)
   );
-  // Track current sort state
   const [sortState, setSortState] = useState<SortState>({
     column: null,
-    direction: null,
+    direction: "none",
   });
 
-  // Sort the data based on the current sort state
+  // Sorted data based on sortState
   const sortedData = useSortedData(data, sortState.column, sortState.direction);
 
-  // Get the ordered list of columns based on columnOrder
+  // Columns ordered by drag-and-drop
   const orderedColumns = useMemo(() => {
     return columnOrder
       .map((id) => columns.find((col) => col.id === id)!)
       .filter(Boolean);
   }, [columnOrder, columns]);
 
-  // Toggle sort direction or set new sort column
+  // Cell refs hook for focus management
+  const { registerCellRef, focusCell } = useCellRefs();
+
+  // Keyboard navigation hook
+  const { focusedCell, onCellKeyDown, focusFirstCellInColumn } =
+    useKeyboardNavigation(sortedData.length, orderedColumns.length, focusCell);
+
+  // Toggle sort direction
   const handleSort = (columnId: string) => {
-    setSortState((prev: SortState) => ({
+    setSortState((prev) => ({
       column: columnId,
-      direction: getDirection(prev, columnId),
+      direction: getNextSortDirection(prev, columnId),
     }));
   };
 
-  function getDirection(prev: SortState, columnId: string): Direction {
-    if (prev.column === columnId) {
-      return prev.direction === "asc" ? "desc" : "asc";
-    }
-    return "asc";
-  }
-
-  // Handle drag-and-drop column reordering
+  // Handle drag end to reorder columns
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
 
-    if (active.id !== over?.id) {
-      setColumnOrder((prevOrder) =>
+    if (active.id !== over.id) {
+      setColumnOrder((prev) =>
         arrayMove(
-          prevOrder,
-          prevOrder.indexOf(String(active.id)),
-          prevOrder.indexOf(String(over.id))
+          prev,
+          prev.indexOf(String(active.id)),
+          prev.indexOf(String(over.id))
         )
       );
     }
   };
 
   return (
-    <div className="mx-auto max-w-full overflow-x-auto [width:min(900px,100%-3rem)]  h-200 block">
+    <div className="mx-auto max-w-full overflow-x-auto [width:min(900px,100%-3rem)] h-200 block">
       <TableVirtuoso
         style={{ height: "100%" }}
         data={sortedData}
@@ -72,11 +73,30 @@ export function Table({ columns, data }: Readonly<TableProps>) {
             onSort={handleSort}
             columnOrder={columnOrder}
             handleDragEnd={handleDragEnd}
+            focusFirstCellInColumn={focusFirstCellInColumn}
           />
         )}
-        itemContent={(_index, row) =>
-          orderedColumns.map((col) => (
-            <Cell key={col.id} value={col.accessor(row)} col={col.id} />
+        itemContent={(rowIndex, row) =>
+          orderedColumns.map((col, colIndex) => (
+            <Cell
+              key={col.id}
+              value={col.accessor(row)}
+              col={col.id}
+              rowIndex={rowIndex}
+              colIndex={colIndex}
+              totalRows={sortedData.length}
+              totalCols={orderedColumns.length}
+              focused={
+                focusedCell.row === rowIndex && focusedCell.col === colIndex
+              }
+              tabIndex={
+                focusedCell.row === rowIndex && focusedCell.col === colIndex
+                  ? 0
+                  : -1
+              }
+              registerRef={(node) => registerCellRef(rowIndex, colIndex, node)}
+              onKeyDown={(e) => onCellKeyDown(e, rowIndex, colIndex)}
+            />
           ))
         }
       />

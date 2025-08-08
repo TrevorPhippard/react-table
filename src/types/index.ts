@@ -7,6 +7,7 @@ export type RowData = {
   city: string;
   registered_date: string;
   DSR?: string;
+  [key: string]: unknown;
 };
 
 export type Column = {
@@ -20,7 +21,7 @@ export type TableProps = {
   data: RowData[];
 };
 
-export type Direction = "asc" | "desc" | null;
+export type Direction = "ascending" | "descending" | "none";
 
 export type SortState = {
   column: string | null;

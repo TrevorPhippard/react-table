@@ -19,16 +19,26 @@ h1{
   font-weight: 700;
 }
 
-tbody tr {
-  width: 100%;
+
+th {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+table{
+  background-color: #52344f;
 }
 
 tbody tr:nth-child(even) {
-  background-color: rgb(148, 122, 145, 0.2);
+  background-color: rgb(246, 244, 246);
 }
 
 tbody tr:nth-child(odd) {
   background-color: rgba(255, 255, 255, 1);
+}
+
+td:focus{
+  outline: #52344f;
 }
 
 
@@ -37,17 +47,15 @@ tbody tr:nth-child(odd) {
     display: none;
   }
 
+  tr{
+            border-bottom: 1px solid #52344f;
+  }
+
   td {
     display: block;
     text-align: left;
     padding: .75rem 1rem;
-  }
 
-  td::before {
-    content: attr(data-cell) ":";
-    font-weight: 700;
-    text-transform: capitalize;
-    padding-right: .5rem
   }
 }
 
