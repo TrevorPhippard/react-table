@@ -95,7 +95,6 @@ export function useKeyboardNavigation(
 
   // Accept number instead of string for column index
   function focusFirstCellInColumn(colIndex: number | null) {
-    console.log("here", colIndex);
     if (colIndex !== null) setFocusedCell({ row: 0, col: colIndex });
   }
 

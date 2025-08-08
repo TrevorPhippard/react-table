@@ -43,7 +43,7 @@ export function Cell({
       onKeyDown={onKeyDown}
       style={{
         outline: focused ? "2px solid Highlight" : "none",
-        userSelect: "none",
+        // userSelect: "none",
       }}
     >
       <span className="inline-block sm:hidden font-bold mr-2">{col}: </span>
