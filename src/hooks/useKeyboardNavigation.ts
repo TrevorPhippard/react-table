@@ -9,14 +9,16 @@ export function useKeyboardNavigation(
   totalRows: number,
   totalCols: number,
   focusCell: (row: number, col: number) => boolean,
-  onExitTable?: (colIndex: number) => void
+  focusHeader: (colIndex: number | null) => boolean
 ) {
   const [focusedCell, setFocusedCell] = useState({ row: 0, col: 0 });
+  const [focusedHeader, setFocusedHeader] = useState(0);
 
   // Whenever focusedCell changes, move focus to that cell
   useEffect(() => {
     focusCell(nanToZero(focusedCell.row), nanToZero(focusedCell.col));
-  }, [focusedCell, focusCell]);
+    if (focusedHeader) focusHeader(focusedHeader);
+  }, [focusedCell, focusCell, focusHeader, focusedHeader]);
 
   // Keyboard handler to update focusedCell state
   function onCellKeyDown(e: KeyboardEvent, row: number, col: number) {
@@ -32,7 +34,7 @@ export function useKeyboardNavigation(
         e.preventDefault();
         if (row === 0) {
           newCol = Math.min(col + 1, totalCols - 1);
-          if (onExitTable) onExitTable(newCol);
+          if (focusHeader) focusHeader(newCol);
           return;
         }
         newRow = Math.max(row - 1, 0);
@@ -66,10 +68,10 @@ export function useKeyboardNavigation(
       default:
         return;
     }
-    console.log(row);
 
     if (newRow !== row || newCol !== col) {
       setFocusedCell({ row: newRow, col: newCol });
+      setFocusedHeader(newCol);
     }
   }
 
@@ -78,5 +80,5 @@ export function useKeyboardNavigation(
     setFocusedCell({ row: 0, col: Number(colIndex) });
   }
 
-  return { focusedCell, onCellKeyDown, focusFirstCellInColumn };
+  return { focusedCell, focusedHeader, onCellKeyDown, focusFirstCellInColumn };
 }

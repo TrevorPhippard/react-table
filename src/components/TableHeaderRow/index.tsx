@@ -10,6 +10,7 @@ interface TableHeaderRowProps {
   orderedColumns: Column[];
   sortState: SortState;
   onSort: (columnId: string) => void;
+  focusedHeader: number | null;
   columnOrder: string[];
   handleDragEnd: (event: DragEndEvent) => void;
   focusFirstCellInColumn: (colIndex: string) => void;
@@ -20,6 +21,7 @@ export function TableHeaderRow({
   orderedColumns,
   sortState,
   onSort,
+  focusedHeader,
   columnOrder,
   handleDragEnd,
   focusFirstCellInColumn,
@@ -40,6 +42,7 @@ export function TableHeaderRow({
             onSort={onSort}
             registerHeaderRef={registerHeaderRef}
             focusFirstCellInColumn={focusFirstCellInColumn}
+            focused={focusedHeader === index}
           />
         ))}
       </SortableContext>

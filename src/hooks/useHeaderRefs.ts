@@ -11,10 +11,14 @@ export function useHeaderRefs() {
     headerRefs.current[index] = node;
   };
 
-  const focusHeader = (index: number) => {
-    console.log(headerRefs.current[index]);
-
-    headerRefs.current[index]?.focus();
+  const focusHeader = (index: number | null) => {
+    if (!index) return false;
+    const node = headerRefs.current[index];
+    if (node) {
+      node.focus();
+      return true;
+    }
+    return false;
   };
   return { registerHeaderRef, focusHeader };
 }

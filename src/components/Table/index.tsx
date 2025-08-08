@@ -9,10 +9,11 @@ import { useWithNewFeilds } from "../../hooks/useWithNewFeilds";
 import { TableVirtuoso } from "react-virtuoso";
 import { TableHeaderRow } from "../TableHeaderRow";
 import { Cell } from "../Cell";
-import { useCellRefs } from "../../hooks/useCellRefs"; // new file
 import { useKeyboardNavigation } from "../../hooks/useKeyboardNavigation"; // new file
 import { getNextSortDirection } from "../../utils/sortUtils"; // new file
+
 import { useHeaderRefs } from "../../hooks/useHeaderRefs";
+import { useCellRefs } from "../../hooks/useCellRefs"; // new file
 
 export function Table({ columns, data: tableData }: Readonly<TableProps>) {
   const [columnOrder, setColumnOrder] = useState(() =>
@@ -23,6 +24,9 @@ export function Table({ columns, data: tableData }: Readonly<TableProps>) {
     column: null,
     direction: "none",
   });
+
+  //  refs hook for focus management
+  const { registerCellRef, focusCell } = useCellRefs();
   const { registerHeaderRef, focusHeader } = useHeaderRefs();
 
   const data = useWithNewFeilds(tableData);
@@ -37,18 +41,13 @@ export function Table({ columns, data: tableData }: Readonly<TableProps>) {
       .filter(Boolean);
   }, [columnOrder, columns]);
 
-  // Cell refs hook for focus management
-  const { registerCellRef, focusCell } = useCellRefs();
-
   // Keyboard navigation hook
-  const { focusedCell, onCellKeyDown, focusFirstCellInColumn } =
+  const { focusedCell, focusedHeader, onCellKeyDown, focusFirstCellInColumn } =
     useKeyboardNavigation(
       sortedData.length,
       orderedColumns.length,
       focusCell,
-      (colIndex: number) => {
-        focusHeader(colIndex); // Focus the matching header
-      }
+      focusHeader
     );
 
   // Toggle sort direction
@@ -84,6 +83,7 @@ export function Table({ columns, data: tableData }: Readonly<TableProps>) {
           <TableHeaderRow
             orderedColumns={orderedColumns}
             sortState={sortState}
+            focusedHeader={focusedHeader}
             onSort={handleSort}
             columnOrder={columnOrder}
             handleDragEnd={handleDragEnd}

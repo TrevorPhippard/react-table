@@ -7,11 +7,13 @@ import { useRef, useState, useEffect } from "react";
 interface Props {
   column: Column;
   colIndex: number;
+  // dataLength: number;
   sortState: {
     column: string | null;
     direction: "ascending" | "descending" | "none";
   };
   onSort: (id: string) => void;
+  focused: boolean;
   focusFirstCellInColumn: (colIndex: string) => void;
   registerHeaderRef: (index: number, node: HTMLTableCellElement | null) => void;
 }
@@ -19,8 +21,10 @@ interface Props {
 export function TableHeader({
   column,
   colIndex,
+  // dataLength,
   sortState,
   onSort,
+  focused,
   focusFirstCellInColumn,
   registerHeaderRef,
 }: Readonly<Props>) {
@@ -42,6 +46,7 @@ export function TableHeader({
     transition,
     width: isDragging ? width : "auto", // fix width when dragging
     minWidth: width, // ensure minWidth matches width to prevent shrinking
+    outline: focused ? "2px solid Highlight" : "none",
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
