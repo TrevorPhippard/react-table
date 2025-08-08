@@ -12,6 +12,7 @@ import { Cell } from "../Cell";
 import { useCellRefs } from "../../hooks/useCellRefs"; // new file
 import { useKeyboardNavigation } from "../../hooks/useKeyboardNavigation"; // new file
 import { getNextSortDirection } from "../../utils/sortUtils"; // new file
+import { useHeaderRefs } from "../../hooks/useHeaderRefs";
 
 export function Table({ columns, data: tableData }: Readonly<TableProps>) {
   const [columnOrder, setColumnOrder] = useState(() =>
@@ -22,10 +23,9 @@ export function Table({ columns, data: tableData }: Readonly<TableProps>) {
     column: null,
     direction: "none",
   });
+  const { registerHeaderRef, focusHeader } = useHeaderRefs();
 
   const data = useWithNewFeilds(tableData);
-
-  console.log(data[0]);
 
   // Sorted data based on sortState
   const sortedData = useSortedData(data, sortState.column, sortState.direction);
@@ -42,7 +42,14 @@ export function Table({ columns, data: tableData }: Readonly<TableProps>) {
 
   // Keyboard navigation hook
   const { focusedCell, onCellKeyDown, focusFirstCellInColumn } =
-    useKeyboardNavigation(sortedData.length, orderedColumns.length, focusCell);
+    useKeyboardNavigation(
+      sortedData.length,
+      orderedColumns.length,
+      focusCell,
+      (colIndex: number) => {
+        focusHeader(colIndex); // Focus the matching header
+      }
+    );
 
   // Toggle sort direction
   const handleSort = (columnId: string) => {
@@ -81,6 +88,7 @@ export function Table({ columns, data: tableData }: Readonly<TableProps>) {
             columnOrder={columnOrder}
             handleDragEnd={handleDragEnd}
             focusFirstCellInColumn={focusFirstCellInColumn}
+            registerHeaderRef={registerHeaderRef}
           />
         )}
         itemContent={(rowIndex, row) =>

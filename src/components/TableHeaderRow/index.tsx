@@ -13,6 +13,7 @@ interface TableHeaderRowProps {
   columnOrder: string[];
   handleDragEnd: (event: DragEndEvent) => void;
   focusFirstCellInColumn: (colIndex: string) => void;
+  registerHeaderRef: (index: number, node: HTMLTableCellElement | null) => void;
 }
 
 export function TableHeaderRow({
@@ -22,6 +23,7 @@ export function TableHeaderRow({
   columnOrder,
   handleDragEnd,
   focusFirstCellInColumn,
+  registerHeaderRef,
 }: Readonly<TableHeaderRowProps>) {
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -29,13 +31,15 @@ export function TableHeaderRow({
         items={columnOrder}
         strategy={horizontalListSortingStrategy}
       >
-        {orderedColumns.map((col) => (
+        {orderedColumns.map((col, index) => (
           <TableHeader
             key={col.id}
             column={col}
+            colIndex={index}
             sortState={sortState}
             onSort={onSort}
-            focusFirstCellInColumn={focusFirstCellInColumn} // pass handler
+            registerHeaderRef={registerHeaderRef}
+            focusFirstCellInColumn={focusFirstCellInColumn}
           />
         ))}
       </SortableContext>

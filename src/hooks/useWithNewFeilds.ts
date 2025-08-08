@@ -11,14 +11,3 @@ export function useWithNewFeilds(data: RowData[]) {
     }));
   }, [data]);
 }
-
-//  {
-//       id: "full_name",
-//       title: "Full Name",
-//       accessor: (row: RowData) => row.first_name + " " + row.last_name,
-//     },
-//     {
-//       id: "DSR",
-//       title: "DSR",
-//       accessor: (row: RowData) => getDaysGoneBy(row.registered_date) + " Days",
-//     },

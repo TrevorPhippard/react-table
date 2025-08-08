@@ -1,5 +1,4 @@
 import type { Column, RowData } from "../types";
-import { getDaysGoneBy } from "../utils/daysSince";
 
 export function useColumns(): Column[] {
   return [
@@ -18,7 +17,7 @@ export function useColumns(): Column[] {
     {
       id: "full_name",
       title: "Full Name",
-      accessor: (row: RowData) => row.full_name,
+      accessor: (row: RowData) => String(row.full_name),
     },
     { id: "email", title: "Email", accessor: (row: RowData) => row.email },
     { id: "city", title: "City", accessor: (row: RowData) => row.city },

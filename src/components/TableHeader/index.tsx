@@ -6,28 +6,26 @@ import { useRef, useState, useEffect } from "react";
 
 interface Props {
   column: Column;
+  colIndex: number;
   sortState: {
     column: string | null;
     direction: "ascending" | "descending" | "none";
   };
   onSort: (id: string) => void;
   focusFirstCellInColumn: (colIndex: string) => void;
+  registerHeaderRef: (index: number, node: HTMLTableCellElement | null) => void;
 }
 
 export function TableHeader({
   column,
+  colIndex,
   sortState,
   onSort,
   focusFirstCellInColumn,
+  registerHeaderRef,
 }: Readonly<Props>) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: column.id });
+  const { attributes, listeners, transform, transition, isDragging } =
+    useSortable({ id: column.id });
 
   const ref = useRef<HTMLTableCellElement>(null);
   const [width, setWidth] = useState(0);
@@ -62,7 +60,7 @@ export function TableHeader({
       style={style}
       aria-sort={sortState.direction}
       ref={(node) => {
-        setNodeRef(node);
+        registerHeaderRef(colIndex, node);
         ref.current = node;
       }}
       onKeyDown={handleKeyDown}

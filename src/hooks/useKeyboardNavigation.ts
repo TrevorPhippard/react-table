@@ -8,7 +8,8 @@ function nanToZero(value: number): number {
 export function useKeyboardNavigation(
   totalRows: number,
   totalCols: number,
-  focusCell: (row: number, col: number) => boolean
+  focusCell: (row: number, col: number) => boolean,
+  onExitTable?: (colIndex: number) => void
 ) {
   const [focusedCell, setFocusedCell] = useState({ row: 0, col: 0 });
 
@@ -29,6 +30,11 @@ export function useKeyboardNavigation(
         break;
       case "ArrowUp":
         e.preventDefault();
+        if (row === 0) {
+          newCol = Math.min(col + 1, totalCols - 1);
+          if (onExitTable) onExitTable(newCol);
+          return;
+        }
         newRow = Math.max(row - 1, 0);
         break;
       case "ArrowRight":
@@ -60,6 +66,7 @@ export function useKeyboardNavigation(
       default:
         return;
     }
+    console.log(row);
 
     if (newRow !== row || newCol !== col) {
       setFocusedCell({ row: newRow, col: newCol });
