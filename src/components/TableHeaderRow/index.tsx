@@ -13,7 +13,7 @@ interface TableHeaderRowProps {
   focusedHeader: number | null;
   columnOrder: string[];
   handleDragEnd: (event: DragEndEvent) => void;
-  focusFirstCellInColumn: (colIndex: string) => void;
+  focusFirstCellInColumn: (colIndex: number | null) => void;
   registerHeaderRef: (index: number, node: HTMLTableCellElement | null) => void;
 }
 

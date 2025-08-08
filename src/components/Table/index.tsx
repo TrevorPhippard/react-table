@@ -102,10 +102,14 @@ export function Table({ columns, data: tableData }: Readonly<TableProps>) {
               totalRows={sortedData.length}
               totalCols={orderedColumns.length}
               focused={
-                focusedCell.row === rowIndex && focusedCell.col === colIndex
+                focusedCell !== null &&
+                focusedCell.row === rowIndex &&
+                focusedCell.col === colIndex
               }
               tabIndex={
-                focusedCell.row === rowIndex && focusedCell.col === colIndex
+                focusedCell !== null &&
+                focusedCell.row === rowIndex &&
+                focusedCell.col === colIndex
                   ? 0
                   : -1
               }

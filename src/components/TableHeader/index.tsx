@@ -14,7 +14,7 @@ interface Props {
   };
   onSort: (id: string) => void;
   focused: boolean;
-  focusFirstCellInColumn: (colIndex: string) => void;
+  focusFirstCellInColumn: (colIndex: number | null) => void;
   registerHeaderRef: (index: number, node: HTMLTableCellElement | null) => void;
 }
 
@@ -52,7 +52,7 @@ export function TableHeader({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      focusFirstCellInColumn(column.id);
+      focusFirstCellInColumn(colIndex);
     }
   };
 

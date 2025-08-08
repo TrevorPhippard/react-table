@@ -8,22 +8,29 @@ function nanToZero(value: number): number {
 export function useKeyboardNavigation(
   totalRows: number,
   totalCols: number,
-  focusCell: (row: number, col: number) => boolean,
-  focusHeader: (colIndex: number | null) => boolean
+  focusCell: (row: number, col: number) => boolean | null,
+  focusHeader: (colIndex: number | null) => boolean | null
 ) {
-  const [focusedCell, setFocusedCell] = useState({ row: 0, col: 0 });
-  const [focusedHeader, setFocusedHeader] = useState(0);
+  // Type focusedCell as nullable object with row and col
+  const [focusedCell, setFocusedCell] = useState<{
+    row: number;
+    col: number;
+  } | null>(null);
+  const [focusedHeader, setFocusedHeader] = useState<number | null>(null);
 
-  // Whenever focusedCell changes, move focus to that cell
   useEffect(() => {
-    focusCell(nanToZero(focusedCell.row), nanToZero(focusedCell.col));
-    if (focusedHeader) focusHeader(focusedHeader);
+    if (focusedCell) {
+      focusCell(nanToZero(focusedCell.row), nanToZero(focusedCell.col));
+    }
+    if (focusedHeader !== null) {
+      focusHeader(focusedHeader);
+    }
   }, [focusedCell, focusCell, focusHeader, focusedHeader]);
 
-  // Keyboard handler to update focusedCell state
   function onCellKeyDown(e: KeyboardEvent, row: number, col: number) {
     let newRow = row;
     let newCol = col;
+    let exitFlag = false;
 
     switch (e.key) {
       case "ArrowDown":
@@ -34,8 +41,8 @@ export function useKeyboardNavigation(
         e.preventDefault();
         if (row === 0) {
           newCol = Math.min(col + 1, totalCols - 1);
+          exitFlag = true;
           if (focusHeader) focusHeader(newCol);
-          return;
         }
         newRow = Math.max(row - 1, 0);
         break;
@@ -70,14 +77,24 @@ export function useKeyboardNavigation(
     }
 
     if (newRow !== row || newCol !== col) {
-      setFocusedCell({ row: newRow, col: newCol });
-      setFocusedHeader(newCol);
+      if (exitFlag) {
+        // Accept 0 as valid index, so check for undefined or null instead
+        if (newCol !== null && newCol !== undefined) {
+          setFocusedHeader(newCol - 1 >= 0 ? newCol - 1 : 0);
+        }
+        setFocusedCell(null);
+      } else {
+        setFocusedCell({ row: newRow, col: newCol });
+        setFocusedHeader(null);
+      }
     }
+
+    console.log({ focusedCell, focusedHeader });
   }
 
-  // helper to focus first cell in a column (for header clicks)
-  function focusFirstCellInColumn(colIndex: string) {
-    setFocusedCell({ row: 0, col: Number(colIndex) });
+  // Accept number instead of string for column index
+  function focusFirstCellInColumn(colIndex: number | null) {
+    if (colIndex !== null) setFocusedCell({ row: 0, col: colIndex });
   }
 
   return { focusedCell, focusedHeader, onCellKeyDown, focusFirstCellInColumn };
