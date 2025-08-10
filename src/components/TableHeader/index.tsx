@@ -7,7 +7,6 @@ import { useRef, useState, useEffect } from "react";
 interface Props {
   column: Column;
   colIndex: number;
-  // dataLength: number;
   sortState: {
     column: string | null;
     direction: "ascending" | "descending" | "none";

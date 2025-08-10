@@ -1,6 +1,5 @@
 import { useRef } from "react";
 
-// useHeaderRefs.ts
 export function useHeaderRefs() {
   const headerRefs = useRef<(HTMLTableCellElement | null)[]>([]);
 

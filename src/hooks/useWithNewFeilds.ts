@@ -7,7 +7,7 @@ export function useWithNewFeilds(data: RowData[]) {
     return data.map((row) => ({
       ...row,
       full_name: `${row.first_name} ${row.last_name}`.trim(),
-      DSR: getDaysGoneBy(row.registered_date) + " Days",
+      DSR: getDaysGoneBy(row.registered_date),
     }));
   }, [data]);
 }
