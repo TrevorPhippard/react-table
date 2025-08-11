@@ -4,7 +4,6 @@ import {
 } from "@dnd-kit/sortable";
 import { TableHeader } from "../TableHeader";
 import type { SortState, Column } from "../../types";
-import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
 
 interface TableHeaderRowProps {
   orderedColumns: Column[];
@@ -12,7 +11,6 @@ interface TableHeaderRowProps {
   onSort: (columnId: string) => void;
   focusedHeader: number | null;
   columnOrder: string[];
-  handleDragEnd: (event: DragEndEvent) => void;
   focusFirstCellInColumn: (colIndex: number | null) => void;
   registerHeaderRef: (index: number, node: HTMLTableCellElement | null) => void;
 }
@@ -23,12 +21,11 @@ export function TableHeaderRow({
   onSort,
   focusedHeader,
   columnOrder,
-  handleDragEnd,
   focusFirstCellInColumn,
   registerHeaderRef,
 }: Readonly<TableHeaderRowProps>) {
   return (
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <tr>
       <SortableContext
         items={columnOrder}
         strategy={horizontalListSortingStrategy}
@@ -46,6 +43,6 @@ export function TableHeaderRow({
           />
         ))}
       </SortableContext>
-    </DndContext>
+    </tr>
   );
 }

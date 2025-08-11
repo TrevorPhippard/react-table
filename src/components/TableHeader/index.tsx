@@ -1,7 +1,6 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { type Column } from "../../types";
-import { ColumnHeader } from "../ColumnHeader";
 import { useRef, useState, useEffect } from "react";
 
 interface Props {
@@ -27,14 +26,8 @@ export function TableHeader({
   focusFirstCellInColumn,
   registerHeaderRef,
 }: Readonly<Props>) {
-  const {
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-    setNodeRef,
-  } = useSortable({ id: column.id });
+  const { listeners, transform, transition, isDragging, setNodeRef } =
+    useSortable({ id: column.id });
 
   const ref = useRef<HTMLTableCellElement>(null);
   const [width, setWidth] = useState(0);
@@ -76,13 +69,23 @@ export function TableHeader({
       }}
       onKeyDown={handleKeyDown}
     >
-      <ColumnHeader
-        title={column.title}
-        isSorted={sortState.column === column.id}
-        sortDirection={sortState.direction}
-        onSort={() => onSort(column.id)}
-        dragHandleProps={{ ...attributes, ...listeners }}
-      />
+      <div
+        tabIndex={0}
+        className="flex items-center justify-between px-4 cursor-pointer select-none"
+        onClick={() => onSort(column.id)}
+      >
+        <div className="truncate p-3">{column.title}</div>
+        <div className="flex">
+          {sortState.column === column.id && (
+            <span className="text-xs">
+              {sortState.direction === "ascending" ? "▲" : "▼"}
+            </span>
+          )}
+          <div className="cursor-grab pl-2" {...listeners}>
+            ⠿
+          </div>
+        </div>
+      </div>
     </th>
   );
 }
