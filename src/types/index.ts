@@ -6,7 +6,7 @@ export type RowData = {
   email: string;
   city: string;
   registered_date: string;
-  DSR?: string;
+  DSR?: number;
   [key: string]: unknown;
 };
 

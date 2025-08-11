@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { type DragEndEvent } from "@dnd-kit/core";
+import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 
 import type { TableProps, SortState } from "../../types";
@@ -76,49 +76,41 @@ export function Table({ columns, data: tableData }: Readonly<TableProps>) {
 
   return (
     <div className="mx-auto max-w-full overflow-x-auto [width:min(1385px,100%-3rem)] h-200 ">
-      <TableVirtuoso
-        style={{ height: "100%" }}
-        data={sortedData}
-        fixedHeaderContent={() => (
-          <TableHeaderRow
-            orderedColumns={orderedColumns}
-            sortState={sortState}
-            focusedHeader={focusedHeader}
-            onSort={handleSort}
-            columnOrder={columnOrder}
-            handleDragEnd={handleDragEnd}
-            focusFirstCellInColumn={focusFirstCellInColumn}
-            registerHeaderRef={registerHeaderRef}
-          />
-        )}
-        itemContent={(rowIndex, row) =>
-          orderedColumns.map((col, colIndex) => (
-            <Cell
-              key={col.id}
-              value={col.accessor(row)}
-              col={col.id}
-              rowIndex={rowIndex}
-              colIndex={colIndex}
-              totalRows={sortedData.length}
-              totalCols={orderedColumns.length}
-              focused={
-                focusedCell !== null &&
-                focusedCell.row === rowIndex &&
-                focusedCell.col === colIndex
-              }
-              tabIndex={
-                focusedCell !== null &&
-                focusedCell.row === rowIndex &&
-                focusedCell.col === colIndex
-                  ? 0
-                  : -1
-              }
-              registerRef={(node) => registerCellRef(rowIndex, colIndex, node)}
-              onKeyDown={(e) => onCellKeyDown(e, rowIndex, colIndex)}
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <TableVirtuoso
+          style={{ height: "100%" }}
+          data={sortedData}
+          fixedHeaderContent={() => (
+            <TableHeaderRow
+              orderedColumns={orderedColumns}
+              sortState={sortState}
+              focusedHeader={focusedHeader}
+              onSort={handleSort}
+              columnOrder={columnOrder}
+              focusFirstCellInColumn={focusFirstCellInColumn}
+              registerHeaderRef={registerHeaderRef}
             />
-          ))
-        }
-      />
+          )}
+          itemContent={(rowIndex, row) =>
+            orderedColumns.map((col, colIndex) => (
+              <Cell
+                key={col.id}
+                value={col.accessor(row)}
+                col={col.id}
+                rowIndex={rowIndex}
+                colIndex={colIndex}
+                totalRows={sortedData.length}
+                totalCols={orderedColumns.length}
+                focusedCell={focusedCell}
+                registerRef={(node) =>
+                  registerCellRef(rowIndex, colIndex, node)
+                }
+                onKeyDown={(e) => onCellKeyDown(e, rowIndex, colIndex)}
+              />
+            ))
+          }
+        />
+      </DndContext>
     </div>
   );
 }
